@@ -148,7 +148,7 @@ def main_worker(gpu, ngpus_per_node, args):
     train_loader = torch.utils.data.DataLoader(
         train_dataset,
         batch_size=args.batch_size,
-        num_workers=args.nDataLoaderThread,
+        num_workers=0,
         sampler=train_sampler,
         pin_memory=False,
         worker_init_fn=worker_init_fn,
@@ -219,7 +219,8 @@ def main_worker(gpu, ngpus_per_node, args):
             print('\n',time.strftime("%Y-%m-%d %H:%M:%S"), "Epoch {:d}, TEER/TAcc {:2.2f}, TLOSS {:f}, LR {:f}".format(it, traineer, loss, max(clr)))
             scorefile.write("Epoch {:d}, TEER/TAcc {:2.2f}, TLOSS {:f}, LR {:f} \n".format(it, traineer, loss, max(clr)))
 
-        if it % args.test_interval == 0:
+        # if it % args.test_interval:
+        if it:
 
             sc, lab, _ = trainer.evaluateFromList(**vars(args))
 
